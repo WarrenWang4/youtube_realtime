@@ -1,0 +1,70 @@
+//Make connection
+var socket = io.connect('http://localhost:5000');
+
+
+var tag = document.createElement('script');
+
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      // 3. This function creates an <iframe> (and YouTube player)
+      //    after the API code downloads.
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: '390',
+          width: '640',
+          videoId: 'M7lc1UVf-VE',
+          events: {
+            'onStateChange': onPlayerStateChange
+          },
+          playerVars: {
+            'controls':0,
+            'disablekb':1,
+            'modestbranding':1,
+            'rel':0,
+            'showinfo':0
+          }
+        });
+      }
+
+      // 4. The API will call this function when the video player is ready.
+
+      // 5. The API calls this function when the player's state changes.
+      //    The function indicates that when playing a video (state=1),
+      //    the player should play for six seconds and then stop.
+      var done = false;
+      function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING && !done) {
+          setTimeout(stopVideo, 6000);
+          done = true;
+        }
+      }
+      function stopVideo() {
+        player.stopVideo();
+      }
+      document.getElementById("progress-bar").addEventListener('click', function(e) {
+        var newTime = player.getDuration() * (e.target.value / 100);
+        player.seekTo(newTime);
+      });
+//Query DOM
+
+
+//Emit events
+
+document.getElementById("playBtn").addEventListener('click', function(){
+	socket.emit('play', 'play');
+});
+
+document.getElementById("pauseBtn").addEventListener('click', function(){
+	socket.emit('pause', 'pause');
+});
+//Listen for events
+socket.on('play', function(data){
+	player.playVideo();
+});
+
+socket.on('pause', function(data){
+	player.pauseVideo();
+});
