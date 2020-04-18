@@ -1,14 +1,37 @@
 <!DOCTYPE html>
 <html>
   <head>
-  	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
+    <link href="/styles.css" rel="stylesheet" />
   <body>
     <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
     <div id="player"></div>
+    <div class="slidecontainer">
+  <input type="range" min="0" value="0" class="slider" id="progress">
+</div>
+<label id="timer"></label>
     <button type="button" id="playBtn">Play</button>
     <button type="button" id="pauseBtn">Pause</button>
-    <input type="range" id="progress-bar" value="0">
+    <button id="mute">Mute</button>
+    <button id="volinc">Vol+</button>
+    <button id="voldec">Vol-</button>
+    <button id="goback">Go back 10 seconds</button>
+    <button id="goforward">Go forward 10 seconds</button>
+    
+
+    
+    <div id="chat">
+      <div id="chat-window">
+        <div id="output"></div>
+        <div id="feedback"></div>
+      </div>
+      <input id="handle" type="text" placeholder="Handle" />
+      <input id="message" type="text" placeholder="Message" />
+      <button id="send">Send</button>
+    </div>
     <script src="/chat.js"></script>
   </body>
 </html>
+
+
 
