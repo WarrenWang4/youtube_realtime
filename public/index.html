@@ -1,47 +1,26 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
-    <link href="/styles.css" rel="stylesheet" />
-  <body>
-    <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
-    <div id="player"></div>
-    <div class="slidecontainer">
-  <input type="range" min="0" value="0" class="slider" id="progress">
-</div>
-<label id="timer"></label>
-    <button type="button" id="playBtn">Play</button>
-    <button type="button" id="pauseBtn">Pause</button>
-    <button id="mute">Mute</button>
-    <button id="volinc">Vol+</button>
-    <button id="voldec">Vol-</button>
-    <button id="goback">Go back 10 seconds</button>
-    <button id="goforward">Go forward 10 seconds</button>
-    
+    <head>
+        <title>
+          YouTube Realtime
+        </title>
+    </head>
+    <body style="background-color: slategrey;">
+        <button onclick = "signIn()">Sign In</button>
+    </body>
+</html>
 
-    
-    <div id="chat">
-      <div id="chat-window">
-        <div id="output"></div>
-        <div id="feedback"></div>
-      </div>
-      <input id="handle" type="text" placeholder="Handle" />
-      <input id="message" type="text" placeholder="Message" />
-      <button id="send">Send</button>
-    </div>
-    <script src="/chat.js"></script>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-auth.js"></script>
 
-    <!-- code to be able to use firebase -->
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-firestore.js"></script>
+<!-- TODO: Add SDKs for Firebase products that you want to use
+    https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-analytics.js"></script>
 
-    <!-- TODO: Add SDKs for Firebase products that you want to use
-         https://firebase.google.com/docs/web/setup#available-libraries -->
-    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-analytics.js"></script>
-
-    <script>
-      // Your web app's Firebase configuration
+<script>
+    // Your web app's Firebase configuration
       var firebaseConfig = {
         apiKey: "AIzaSyAXz1hDMesciBYe-Hj5n_xHmatymT6PWGo",
         authDomain: "realtime-fbbc9.firebaseapp.com",
@@ -52,26 +31,12 @@
         appId: "1:868489312223:web:e7c19ecd40567f72a4b66a",
         measurementId: "G-P2DKFZMLFR"
       };
-      // Initialize Firebase
-      firebase.initializeApp(firebaseConfig);
-      const db = firebase.firestore();
-      firebase.analytics();
-    </script>
-
-    <!-- sample code to get all users -->
-    <script>
-      //there are two collections in the database: 'users' and 'groups'
-      //this script iterates though every user in the database and gets their name and password
-      var user = db.collection('users').get().then((snapshot) => {
-        snapshot.docs.forEach(doc =>{
-          console.log(doc.data().name)
-          console.log(doc.data().password)
-        })
-      })
-    </script>
-    <!-- sample code to get all users -->
-  </body>
-</html>
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+</script>
 
 
-
+<script src="auth.js"></script>
