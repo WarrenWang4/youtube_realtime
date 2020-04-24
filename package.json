@@ -1,7 +1,7 @@
 {
-  "name": "eecs448project2",
+  "name": "eecs448db",
   "version": "1.0.0",
-  "description": "A networked video player web app",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/WarrenWang4/youtube_realtime.git"
   },
-  "author": "Jack Lunceford",
+  "author": "me",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/WarrenWang4/youtube_realtime/issues"

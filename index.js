@@ -5,8 +5,8 @@ var socket = require('socket.io');
 var app = express();
 
 
-var server = app.listen(3000, function(){
-	console.log('listening to requests on port 3000');
+var server = app.listen(5000, function(){
+	console.log('listening to requests on port 5000');
 });
 
 //Static files
@@ -26,12 +26,20 @@ io.on('connection', function(socket){
 		io.sockets.emit('pause', data);
 		console.log(data);
 	});
+	socket.on('restart', function(data){
+		io.sockets.emit('restart', data);
+		console.log(data);
+	});
 	socket.on('goback', function(data){
 		io.sockets.emit('goback', data);
 		console.log(data);
 	});
 	socket.on('goforward', function(data){
 		io.sockets.emit('goforward', data);
+		console.log(data);
+	});
+	socket.on('goforward2', function(data){
+		io.sockets.emit('goforward2', data);
 		console.log(data);
 	});
 	socket.on('chat', function(data){

@@ -1,5 +1,42 @@
 //Make connection
-var socket = io.connect('http://localhost:3000');
+var socket = io.connect('http://localhost:5000');
+var firebaseConfig = {
+        apiKey: "AIzaSyAXz1hDMesciBYe-Hj5n_xHmatymT6PWGo",
+        authDomain: "realtime-fbbc9.firebaseapp.com",
+        databaseURL: "https://realtime-fbbc9.firebaseio.com",
+        projectId: "realtime-fbbc9",
+        storageBucket: "realtime-fbbc9.appspot.com",
+        messagingSenderId: "868489312223",
+        appId: "1:868489312223:web:e7c19ecd40567f72a4b66a",
+        measurementId: "G-P2DKFZMLFR"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+      firebase.analytics();
+       const auth = firebase.auth();
+let user = firebase.auth().currentUser;
+let userName2 = "";
+let handle = "";
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    console.log(user.displayName);
+    handle = user.displayName;
+    socket.emit('chat', {
+    message: user.displayName + " has entered the chat",
+    handle: user.displayName
+  });
+  } else {
+  }
+});
+
+//let video = localStorage.getItem("link");
+//console.log(video);
+let video = localStorage.getItem("link");
+if (video == ""){
+  video = localStorage.getItem("link2");
+}
+  
 
 
 var tag = document.createElement('script');
@@ -17,7 +54,7 @@ var tag = document.createElement('script');
         player = new YT.Player('player', {
           height: '700',
           width: '1400',
-          videoId: '25tGPblFqQI',
+          videoId: video,
           events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange
@@ -63,6 +100,7 @@ var tag = document.createElement('script');
         if (event.data == YT.PlayerState.ENDED)
         {
           clearTimeout(timeout_setter);
+          document.getElementById("playBtn").innerHTML = "Watch again";
         }
       }
       function stopVideo() {
@@ -86,31 +124,40 @@ var message = document.getElementById('message');
 //Emit events
 
 document.getElementById("playBtn").addEventListener('click', function(){
-  socket.emit('play', 'play');
+  if (document.getElementById("playBtn").innerHTML == "Play"){
+    socket.emit('play', 'play');
+  }
+  else if (document.getElementById("playBtn").innerHTML == "Pause"){
+    socket.emit('pause', 'pause');
+  }
+  else{
+    socket.emit('restart', 'restart');
+  }
 });
-
-document.getElementById("pauseBtn").addEventListener('click', function(){
-  socket.emit('pause', 'pause');
-});
-
 document.getElementById("goback").addEventListener('click', function() {
         var newTime = player.getCurrentTime() - 10;
         socket.emit('goback', newTime);
 });
 document.getElementById("goforward").addEventListener('click', function() {
         var newTime = player.getCurrentTime() + 10;
-        socket.emit('goforward', newTime);
+        if (newTime <= player.getDuration()){
+          socket.emit('goforward', newTime);
+        }
+        else{
+          socket.emit('goforward2', player.getDuration());
+        }
 });
 
 btn.addEventListener('click', function(){
   socket.emit('chat', {
     message: message.value,
-    handle: handle.value
+    handle: handle
   });
+  message.value = "";
 });
 
 message.addEventListener('keypress', function(){
-  socket.emit('typing', handle.value);
+  socket.emit('typing', handle);
 });
 
 mute.addEventListener('click', function(){
@@ -135,6 +182,19 @@ voldec.addEventListener('click', function(){
     player.setVolume(player.getVolume() - 10);
   }
 });
+//document.getElementById("CC").addEventListener('click', function(){
+  //if (document.getElementById("CC").innerHTML == "CC on"){
+   //player.loadModule("captions");
+    //player.loadModule("cc");
+    //document.getElementById("CC").innerHTML = "CC off";
+  //}
+ //else{
+    //player.unloadModule("captions");
+    //player.unloadModule("cc");
+    //document.getElementById("CC").innerHTML = "CC on";
+  //}
+//});
+
 
 progress.addEventListener('mouseup', function(e) {
   socket.emit('progress', e.target.value);
@@ -143,10 +203,18 @@ progress.addEventListener('mouseup', function(e) {
 //Listen for events
 socket.on('play', function(data){
   player.playVideo();
+  document.getElementById("playBtn").innerHTML = "Pause";
 });
 
 socket.on('pause', function(data){
   player.pauseVideo();
+  document.getElementById("playBtn").innerHTML = "Play";
+});
+
+socket.on('restart', function(data){
+  player.seekTo(0);
+  timeLoop();
+  document.getElementById("playBtn").innerHTML = "Pause";
 });
 
 socket.on('goback', function(data){
@@ -157,15 +225,20 @@ socket.on('goforward', function(data){
   player.seekTo(data);
   progress.value = (player.getCurrentTime()/player.getDuration() + 10);
 });
+socket.on('goforward2', function(data){
+  timer.innerHTML = data + "/" + data;
+  player.seekTo(data);
+  progress.value = data;
+});
 socket.on('chat', function(data){
   feedback.innerHTML = "";
-  output.innerHTML += '<p><strong>' + data.handle + ':</strong>' + data.message + '</p>';
+  output.innerHTML += '<p><strong>' + data.handle + ':</strong>' + ' ' + data.message + '</p>';
 });
 socket.on('typing', function(data){
   feedback.innerHTML = '<p><em>' + data + ' is typing a message...</em></p>';
-})
+});
 socket.on('progress', function(data){
   player.seekTo(data);
   progress.value = data;
   timer.innerHTML = formatTime(data) + "/" + formatTime(player.getDuration());
-})
+});
