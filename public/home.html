@@ -6,14 +6,44 @@
         </title>
     </head>
     <body style="background-color: slategrey;">
-	  <label for="link">Video Link:</label>
-	  <input type="text" id="link" name="link" required>
-	  <button onclick="submit()">Submit</button>
-    </body>
-</html>
+        <button type="button" id="create">Create Group</button>
+        <label for="groupPass" id="groupPassLabel">Group Password:</label>
+        <input type="text" id="groupPass" name="groupPass">
+	  <label for="link" id="labelLink">Video Link:</label>
+	  <input type="text" id="link" name="link">
+      <button type="button" id="join">Join Group</button>
+       <label for="groupPass2" id="groupPassLabel2">Group Password:</label>
+        <input type="text" id="groupPass2" name="groupPass2">
+	  <button id="submit">Submit</button>
+<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-auth.js"></script>
 
-<script type="text/javascript">
-	function submit() {
-		window.location = 'video.html'
-	}
+<!-- TODO: Add SDKs for Firebase products that you want to use
+    https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-analytics.js"></script>
+
+
+    
+<script>
+    // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: "AIzaSyAXz1hDMesciBYe-Hj5n_xHmatymT6PWGo",
+        authDomain: "realtime-fbbc9.firebaseapp.com",
+        databaseURL: "https://realtime-fbbc9.firebaseio.com",
+        projectId: "realtime-fbbc9",
+        storageBucket: "realtime-fbbc9.appspot.com",
+        messagingSenderId: "868489312223",
+        appId: "1:868489312223:web:e7c19ecd40567f72a4b66a",
+        measurementId: "G-P2DKFZMLFR"
+      };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+    db.settings({ timestampsInSnapshots: true});
 </script>
+<script src="home.js"></script>
+</body>
+</html>
