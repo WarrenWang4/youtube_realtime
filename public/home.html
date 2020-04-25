@@ -1,20 +1,94 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>
-          YouTube Realtime
-        </title>
-    </head>
-    <body style="background-color: slategrey;">
-        <button type="button" id="create">Create Group</button>
+<title>Home</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+
+    <style>
+    body,h1,h2{font-family: "Raleway", sans-serif}
+    body, html {height: 100%}
+    p {line-height: 2}
+    .bghome{
+    min-height: 100%;
+    background-position: center;
+    background-size: cover;
+    background-color: red;
+    }
+    .bgjoin{
+    background-color: red;
+    }
+    </style>
+
+    <body>
+
+    <!-- Header / Home-->
+    <header class="w3-display-container w3-wide bghome" id="home">
+    <div class="w3-display-middle w3-text-white w3-center">
+        <h1 class="w3-jumbo">Stream Youtube Live!</h1>
+        <h2>With friends and family</h2>
+        <h2><b>Group 8</b></h2>
+    </div>
+    </header>
+
+    <!-- Navbar (sticky bottom) -->
+    <div class="w3-bottom w3-hide-small">
+    <div class="w3-bar w3-white w3-center w3-padding w3-opacity-min w3-hover-opacity-off">
+        <a href="#home" style="width:33%" class="w3-bar-item w3-button">Home</a>
+        <a href="#create" style="width:33%" class="w3-bar-item w3-button">Create Group</a>
+        <a href="#join" style="width:33%" class="w3-bar-item w3-button">Join Group</a>
+    </div>
+    </div>
+
+    <!-- Create Group -->
+    <div class="w3-container  w3-center w3-padding-64" id="create">
+    <div class="w3-content">
+        <h1 class="w3-center"><b>Create Group</b></h1>
+        <br>
+        <br>
+        <br>
+        <br>
         <label for="groupPass" id="groupPassLabel">Group Password:</label>
         <input type="text" id="groupPass" name="groupPass">
-	  <label for="link" id="labelLink">Video Link:</label>
-	  <input type="text" id="link" name="link">
-      <button type="button" id="join">Join Group</button>
-       <label for="groupPass2" id="groupPassLabel2">Group Password:</label>
+        <br>
+        <label for="link" id="labelLink">Video Link:</label>
+        <input type="text" id="link" name="link">
+        <br>
+        <br>
+        <br>
+        <button id="submit1">Submit</button>
+        <br>
+        <br>
+        <br>
+        <br>
+    </div>
+    </div>
+
+
+    <!-- Join Group -->
+    <div class="w3-container w3-padding-64  w3-center bgjoin" id="join">
+    <div class="w3-content w3-text-white">
+        <h1 ><b>Join Group</b></h1>
+        <br>
+        <br>
+        <br>
+        <br>
+        <label for="groupPass2" id="groupPassLabel2">Group Password:</label>
         <input type="text" id="groupPass2" name="groupPass2">
-	  <button id="submit">Submit</button>
+        <br>
+        <br>
+        <br>
+        <button id="submit2">Submit</button>
+        <br>
+        <br>
+        <br>
+        <br>
+    </div>
+    </div>
+    </body>
+</html>
+
 <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-firestore.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-auth.js"></script>
@@ -22,8 +96,6 @@
 <!-- TODO: Add SDKs for Firebase products that you want to use
     https://firebase.google.com/docs/web/setup#available-libraries -->
 <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-analytics.js"></script>
-
-
     
 <script>
     // Your web app's Firebase configuration
@@ -45,5 +117,3 @@
     db.settings({ timestampsInSnapshots: true});
 </script>
 <script src="home.js"></script>
-</body>
-</html>

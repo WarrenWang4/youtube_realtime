@@ -30,7 +30,7 @@ body{
 }
 
 #output strong{
-    color: #575ed8;
+    color: red;
 }
 
 label{
@@ -66,7 +66,7 @@ label{
 }
 
 #send{
-    background: #575ed8;
+    background: red;
     color: #fff;
     font-size: 18px;
     border: 0;
@@ -104,3 +104,28 @@ label{
   background: #4CAF50;
   cursor: pointer;
 }
+
+.btn-group button {
+    background-color: red; /* Green background */
+    border: 1px solid green; /* Green border */
+    color: white; /* White text */
+    padding: 10px 24px; /* Some padding */
+    cursor: pointer; /* Pointer/hand icon */
+    float: left; /* Float the buttons side by side */
+    }
+
+  .btn-group button:not(:last-child) {
+    border-right: none; /* Prevent double borders */
+  }
+
+  /* Clear floats (clearfix hack) */
+  .btn-group:after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+
+  /* Add a background color on hover */
+  .btn-group button:hover {
+    background-color: #3e8e41;
+  }
