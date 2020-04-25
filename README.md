@@ -1,6 +1,6 @@
 # youtube_realtime	
-Stream youtube videos with your friends in real time.	
-How to run:	
+## Stream youtube videos with your friends in real time.	
+### How to run:	
 1.) Make sure you have Node.js and npm installed.	
 2.) Inside directory with cloned repo, type the following commands (within quotations):	
     "npm init",	
