@@ -4,9 +4,11 @@ var socket = require('socket.io');
 //App setup
 var app = express();
 
-
-var server = app.listen(5000, function(){
-	console.log('listening to requests on port 5000');
+/*var server = app.listen(5000, function(){
+	console.log('listening to Heroku port');
+});*/
+var server = app.listen(process.env.PORT || 5000, function(){
+	console.log('listening to Heroku port');
 });
 
 //Static files
