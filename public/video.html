@@ -6,6 +6,8 @@
     </title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
     <link href="/styles.css" rel="stylesheet" />
+  
+
   <body>
     <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
     <div id="player"></div>
@@ -13,13 +15,15 @@
   <input type="range" min="0" value="0" class="slider" id="progress">
 </div>
 <label id="timer"></label>
-    <button type="button" id="playBtn">Play</button>
-    <button id="mute">Mute</button>
-    <button id="volinc">Vol+</button>
-    <button id="voldec">Vol-</button>
-    <button id="goback">Go back 10 seconds</button>
-    <button id="goforward">Go forward 10 seconds</button>
-    <button id="CC">CC on</button>
+  <div class="btn-group" style="width:100%">
+    <button type="button" id="playBtn" style="width:15%">Play</button>
+    <button id="mute" style="width:15%">Mute</button>
+    <button id="volinc" style="width:10%">Vol+</button>
+    <button id="voldec" style="width:10%">Vol-</button>
+    <button id="goback" style="width:20%">Go back 10 seconds</button>
+    <button id="goforward" style="width:20%">Go forward 10 seconds</button>
+    <button id="CC" style="width:10%">CC on</button>
+  </div>
 
     
     <div id="chat">
