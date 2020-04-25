@@ -1,5 +1,5 @@
 //Make connection
-var socket = io.connect('http://localhost:5000');
+var socket = io.connect(process.env.PORT);
 var firebaseConfig = {
         apiKey: "AIzaSyAXz1hDMesciBYe-Hj5n_xHmatymT6PWGo",
         authDomain: "realtime-fbbc9.firebaseapp.com",
