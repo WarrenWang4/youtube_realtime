@@ -10,4 +10,4 @@
       "npm install socket.io --save"	  
  3.) Congrats! You have just installed express (web app framework), nodemon (automatically restarts server whenever you make a change to your code), and socket.io (helps you create web sockets that are handy for real time web apps)	  
  4.) Finally, run with the following command:	  
-       "nodemon index". 
+       "nodemon index" or "npx nodemon" 
