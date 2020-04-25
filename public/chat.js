@@ -1,5 +1,5 @@
 //Make connection
-var socket = io.connect(process.env.PORT);
+var socket = io.connect( "https://youtube-with-friends.herokuapp.com/");
 var firebaseConfig = {
         apiKey: "AIzaSyAXz1hDMesciBYe-Hj5n_xHmatymT6PWGo",
         authDomain: "realtime-fbbc9.firebaseapp.com",
