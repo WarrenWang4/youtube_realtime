@@ -1,5 +1,6 @@
 //Make connection
-var socket = io.connect( "https://youtube-with-friends.herokuapp.com/");
+document.getElementById("previousVideo").style.visibility = "hidden";
+var socket = io.connect('https://youtube-with-friends.herokuapp.com/');
 var firebaseConfig = {
         apiKey: "AIzaSyAXz1hDMesciBYe-Hj5n_xHmatymT6PWGo",
         authDomain: "realtime-fbbc9.firebaseapp.com",
@@ -32,13 +33,20 @@ firebase.auth().onAuthStateChanged((user) => {
 
 //let video = localStorage.getItem("link");
 //console.log(video);
-let video = localStorage.getItem("link");
-if (video == ""){
-  video = localStorage.getItem("link2");
+let videos = JSON.parse(localStorage.getItem("idsList"));
+console.log(videos);
+if (videos[0] == ""){
+  videos = JSON.parse(localStorage.getItem("idsList2"));
 }
-  
+let currentVideoId = 0;
+if (videos.length == 1){
+  document.getElementById("nextVideo").style.visibility = "hidden";
+}
+console.log(videos);
+console.log(typeof videos);
 
-
+console.log(videos[currentVideoId]);
+console.log(typeof videos[currentVideoId]);
 var tag = document.createElement('script');
 
       tag.src = "https://www.youtube.com/iframe_api";
@@ -54,7 +62,7 @@ var tag = document.createElement('script');
         player = new YT.Player('player', {
           height: '700',
           width: '1400',
-          videoId: video,
+          videoId: videos[currentVideoId],
           events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange
@@ -91,16 +99,35 @@ var tag = document.createElement('script');
         return hours + ":" + minutes + ":" + seconds;
       }
       function onPlayerStateChange(event) {
-        myTimer = setInterval(function(){ 
+        if (event.data == YT.PlayerState.ENDED){
+           document.getElementById("playBtn").innerHTML = "Watch again";
+           clearTimeout(timeout_setter);
+        }
+        else if (event.data == YT.PlayerState.PLAYING){
+           myTimer = setInterval(function(){ 
           var time;
           currentTime = formatTime(player.getCurrentTime());
           totalTime = formatTime(player.getDuration());
           timer.innerHTML = currentTime + "/" + totalTime;
         }, 100);
-        if (event.data == YT.PlayerState.ENDED)
-        {
-          clearTimeout(timeout_setter);
-          document.getElementById("playBtn").innerHTML = "Watch again";
+          document.getElementById("playBtn").innerHTML = "Pause";
+           if (currentVideoId >= 0){
+              timeLoop();
+              progress.max = player.getDuration();
+            }
+          if (currentVideoId == videos.length - 1){
+            document.getElementById("nextVideo").style.visibility = "hidden";
+          }
+          else{
+            document.getElementById("nextVideo").style.visibility = "visible";
+            if (currentVideoId == 1){
+              document.getElementById("previousVideo").style.visibility = "visible";
+            }
+            else if (currentVideoId == 0){
+              document.getElementById("previousVideo").style.visibility = "hidden";
+              document.getElementById("nextVideo").style.visibility = "visible";
+            }
+          }
         }
       }
       function stopVideo() {
@@ -110,6 +137,16 @@ var tag = document.createElement('script');
         progress.value = player.getCurrentTime();
         timeout_setter = setTimeout(timeLoop, 1000);
       }
+      document.getElementById("nextVideo").addEventListener('click', function(){
+        socket.emit('nextVideo', 'nextVideo');
+        //currentVideoId++;
+          //  player.loadVideoById(videos[currentVideoId]);
+      });
+      document.getElementById("previousVideo").addEventListener('click', function(){
+        socket.emit('previousVideo', 'previousVideo');
+       // currentVideoId --;
+        //  player.loadVideoById(videos[currentVideoId]);
+      });
 
 //Query DOM
 var message = document.getElementById('message');
@@ -120,7 +157,6 @@ var message = document.getElementById('message');
     mute = document.getElementById('mute'),
     volinc = document.getElementById('volinc'),
     vocdec = document.getElementById('voldec');
-
 //Emit events
 
 document.getElementById("playBtn").addEventListener('click', function(){
@@ -230,9 +266,20 @@ socket.on('goforward2', function(data){
   player.seekTo(data);
   progress.value = data;
 });
+let numChats = 0;
+function scrollToBottom() {
+  $('#chat-window').stop().animate({
+  scrollTop: $('#chat-window')[0].scrollHeight
+}, 800);
+}
 socket.on('chat', function(data){
   feedback.innerHTML = "";
   output.innerHTML += '<p><strong>' + data.handle + ':</strong>' + ' ' + data.message + '</p>';
+  numChats ++;
+  if (numChats % 8 == 0){
+    console.log("8");
+    scrollToBottom();
+  }
 });
 socket.on('typing', function(data){
   feedback.innerHTML = '<p><em>' + data + ' is typing a message...</em></p>';
@@ -242,3 +289,11 @@ socket.on('progress', function(data){
   progress.value = data;
   timer.innerHTML = formatTime(data) + "/" + formatTime(player.getDuration());
 });
+socket.on('nextVideo', function(data){
+  currentVideoId++;
+  player.loadVideoById(videos[currentVideoId]);
+});
+socket.on('previousVideo', function(data){
+  currentVideoId --;
+  player.loadVideoById(videos[currentVideoId]);
+})

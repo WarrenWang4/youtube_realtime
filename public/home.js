@@ -4,6 +4,7 @@
 // document.getElementById("link").style.visibility = "hidden";
 // document.getElementById("groupPassLabel2").style.visibility = "hidden";
 // document.getElementById("groupPass2").style.visibility = "hidden";
+document.getElementById("error").style.visibility = "hidden";
 function isYoutube(getURL)
 {
   if(typeof getURL!=='string') return false;
@@ -39,39 +40,47 @@ function CheckPassword(inputtxt)
 // document.getElementById("groupPass").style.visibility = "visible";
 // document.getElementById("labelLink").style.visibility = "visible";
 // document.getElementById("link").style.visibility = "visible";
-
+let linksList = [];
+document.getElementById("another").addEventListener('click', function(){
+  let newLink = String(document.getElementById("link").value);
+  if (isYoutube(newLink) !== false && isYoutube(link) !== ""){
+    document.getElementById("error").style.visibility = "hidden";
+    linksList.push(String(document.getElementById("link").value));
+    document.getElementById("link").value = "";
+  }
+  else{
+    document.getElementById("error").style.visibility = "visible";
+  }
+  
+});
 document.getElementById("submit1").addEventListener('click', async function()  {
-  let link = String(document.getElementById("link").value);
+  let lastLink = String(document.getElementById("link").value);
+  if (isYoutube(lastLink) !== false && isYoutube(lastLink) !== ""){
+    linksList.push(String(document.getElementById("link").value));
+  }
+  else{
+    document.getElementById("error").style.visibility = "visible";
+  }
   let pass = String(document.getElementById("groupPass").value);
-  if (isYoutube(link) !== false && isYoutube(link) !== ""){
     if(CheckPassword(pass)){
-      let id = isYoutube(link);
+      let idsList = [];
+      for (const link of linksList){
+        idsList.push(isYoutube(link));
+      }
+      console.log(idsList);
       db.collection("groups").add({
-            videoLink: id,
+            videoIds: idsList,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
           groupPass: pass
         }).then(() => {
-          localStorage.setItem("link", id);
-          localStorage.setItem("link2", "");
-            window.location.href = './video.html';
+          localStorage.setItem("idsList", JSON.stringify(idsList));
+          localStorage.setItem("idsList2", JSON.stringify([""]));
+          window.location.href = './video.html';
       });
     }
     else{
       alert("password must be between 8 to 15 characters which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character.");
     }
-  }
-  else if (isYoutube(link) == false){
-    alert("Make sure the link submitted is a valid Youtube video link!");
-    if (!CheckPassword(pass)){
-      alert("password must be between 8 to 15 characters which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character.");
-    }
-  }
-  else if (isYoutube(link) == ""){
-    alert("Make sure the Youtube video link submitted contains a video ID!");
-    if (!CheckPassword(pass)){
-      alert("password must be between 8 to 15 characters which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character.");
-    }
-  }
 });
 // });
 
@@ -85,7 +94,7 @@ document.getElementById("submit2").addEventListener('click', function() {
       snapshot.docs.forEach(doc => {
         if (doc.exists){
 
-         resolve(doc.data().videoLink);
+         resolve(doc.data().videoIds);
         }
         else{
           console.log("uh oh");
@@ -95,10 +104,10 @@ document.getElementById("submit2").addEventListener('click', function() {
   });
 });
   promise2.then((success) => {
-    let link2 = success;
-    localStorage.setItem("link2", link2);
-    localStorage.setItem("link", "");
-    console.log(link2);
+    let idsList2 = success;
+    localStorage.setItem("idsList2", JSON.stringify(idsList2));
+    localStorage.setItem("idsList", JSON.stringify([""]));
+    console.log(idsList2);
     window.location.href = './video.html';
   });
   promise2.catch((error) => {
