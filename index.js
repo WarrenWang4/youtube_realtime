@@ -53,5 +53,13 @@ io.on('connection', function(socket){
 	socket.on('progress', function(data){
 		io.sockets.emit('progress', data);
 	})
+	socket.on('nextVideo', function(data){
+		io.sockets.emit('nextVideo', data);
+		console.log(data);
+	})
+	socket.on('previousVideo', function(data){
+		io.sockets.emit('previousVideo', data);
+		console.log(data);
+	})
 });
 
