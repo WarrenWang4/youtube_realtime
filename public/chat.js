@@ -1,6 +1,6 @@
 //Make connection
 document.getElementById("previousVideo").style.visibility = "hidden";
-var socket = io.connect('https://youtube-with-friends.herokuapp.com/');
+var socket = io.connect('https://youtube-with-friends.herokuapp.com/'); // use http://localhost:5000/ or https://youtube-with-friends.herokuapp.com/
 var firebaseConfig = {
         apiKey: "AIzaSyAXz1hDMesciBYe-Hj5n_xHmatymT6PWGo",
         authDomain: "realtime-fbbc9.firebaseapp.com",
@@ -102,33 +102,34 @@ var tag = document.createElement('script');
         if (event.data == YT.PlayerState.ENDED){
            document.getElementById("playBtn").innerHTML = "Watch again";
            clearTimeout(timeout_setter);
-        }
-        else if (event.data == YT.PlayerState.PLAYING){
-           myTimer = setInterval(function(){ 
-          var time;
-          currentTime = formatTime(player.getCurrentTime());
-          totalTime = formatTime(player.getDuration());
-          timer.innerHTML = currentTime + "/" + totalTime;
-        }, 100);
-          document.getElementById("playBtn").innerHTML = "Pause";
-           if (currentVideoId >= 0){
-              timeLoop();
-              progress.max = player.getDuration();
+        } else if (event.data == YT.PlayerState.PLAYING){
+            myTimer = setInterval(function(){ 
+            var time;
+            currentTime = formatTime(player.getCurrentTime());
+            totalTime = formatTime(player.getDuration());
+            timer.innerHTML = currentTime + "/" + totalTime;
+            }, 100);
+
+            document.getElementById("playBtn").innerHTML = "Pause";
+            if (currentVideoId >= 0){
+                timeLoop();
+                progress.max = player.getDuration();
             }
-          if (currentVideoId == videos.length - 1){
-            document.getElementById("nextVideo").style.visibility = "hidden";
-          }
-          else{
-            document.getElementById("nextVideo").style.visibility = "visible";
-            if (currentVideoId == 1){
+
+            if (currentVideoId == videos.length - 1){
+              document.getElementById("nextVideo").style.visibility = "hidden";
+            } else {
+              document.getElementById("nextVideo").style.visibility = "visible";
+            }
+
+            if (currentVideoId >= 1){
               document.getElementById("previousVideo").style.visibility = "visible";
-            }
+            } 
             else if (currentVideoId == 0){
               document.getElementById("previousVideo").style.visibility = "hidden";
               document.getElementById("nextVideo").style.visibility = "visible";
             }
-          }
-        }
+          } 
       }
       function stopVideo() {
         player.stopVideo();
