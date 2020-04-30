@@ -19,24 +19,38 @@ var firebaseConfig = {
 let user = firebase.auth().currentUser;
 let userName2 = "";
 let handle = "";
-firebase.auth().onAuthStateChanged((user) => {
-  if (user) {
-    console.log(user.displayName);
-    handle = user.displayName;
-    socket.emit('chat', {
-    message: user.displayName + " has entered the chat",
-    handle: user.displayName
-  });
-  } else {
-  }
-});
-
 //let video = localStorage.getItem("link");
 //console.log(video);
 let videos = JSON.parse(localStorage.getItem("idsList"));
 console.log(videos);
+let groupToken = "";
+let didCreate = false;
 if (videos[0] == ""){
   videos = JSON.parse(localStorage.getItem("idsList2"));
+  groupToken = localStorage.getItem("groupID2");
+}
+else{
+  groupToken = localStorage.getItem("groupID");
+  console.log(groupToken);
+  console.log(typeof groupToken);
+  didCreate = true;
+}
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    console.log(user.displayName);
+    handle = user.displayName;
+    socket.emit('enterChat', {
+    message: user.displayName + " has entered the chat",
+    groupToken: groupToken
+  });
+  } else {
+  }
+});
+if (didCreate){
+  socket.emit('create', groupToken);
+}
+else{
+  socket.emit('join', groupToken);
 }
 let currentVideoId = 0;
 if (videos.length == 1){
@@ -47,6 +61,9 @@ console.log(typeof videos);
 
 console.log(videos[currentVideoId]);
 console.log(typeof videos[currentVideoId]);
+
+
+
 var tag = document.createElement('script');
 
       tag.src = "https://www.youtube.com/iframe_api";
@@ -139,12 +156,12 @@ var tag = document.createElement('script');
         timeout_setter = setTimeout(timeLoop, 1000);
       }
       document.getElementById("nextVideo").addEventListener('click', function(){
-        socket.emit('nextVideo', 'nextVideo');
+        socket.emit('nextVideo', groupToken);
         //currentVideoId++;
           //  player.loadVideoById(videos[currentVideoId]);
       });
       document.getElementById("previousVideo").addEventListener('click', function(){
-        socket.emit('previousVideo', 'previousVideo');
+        socket.emit('previousVideo', groupToken);
        // currentVideoId --;
         //  player.loadVideoById(videos[currentVideoId]);
       });
@@ -162,39 +179,52 @@ var message = document.getElementById('message');
 
 document.getElementById("playBtn").addEventListener('click', function(){
   if (document.getElementById("playBtn").innerHTML == "Play"){
-    socket.emit('play', 'play');
+    socket.emit('play', groupToken);
   }
   else if (document.getElementById("playBtn").innerHTML == "Pause"){
-    socket.emit('pause', 'pause');
+    socket.emit('pause', groupToken);
   }
   else{
-    socket.emit('restart', 'restart');
+    socket.emit('restart', groupToken);
   }
 });
 document.getElementById("goback").addEventListener('click', function() {
         var newTime = player.getCurrentTime() - 10;
-        socket.emit('goback', newTime);
+        let goBackObj = {
+          groupToken: groupToken,
+          newTime: newTime
+        }
+        socket.emit('goback', goBackObj);
 });
 document.getElementById("goforward").addEventListener('click', function() {
         var newTime = player.getCurrentTime() + 10;
+        let goForwardObj = {
+          groupToken: groupToken,
+          newTime: newTime
+        }
         if (newTime <= player.getDuration()){
-          socket.emit('goforward', newTime);
+          socket.emit('goforward', goForwardObj);
         }
         else{
-          socket.emit('goforward2', player.getDuration());
+          newTime = player.getDuration();
+          socket.emit('goforward2', goForwardObj);
         }
 });
 
 btn.addEventListener('click', function(){
   socket.emit('chat', {
     message: message.value,
-    handle: handle
+    handle: handle,
+    groupToken: groupToken
   });
   message.value = "";
 });
 
 message.addEventListener('keypress', function(){
-  socket.emit('typing', handle);
+  socket.emit('typing', {
+    handle: handle,
+    groupToken: groupToken
+    });
 });
 
 mute.addEventListener('click', function(){
@@ -219,22 +249,10 @@ voldec.addEventListener('click', function(){
     player.setVolume(player.getVolume() - 10);
   }
 });
-//document.getElementById("CC").addEventListener('click', function(){
-  //if (document.getElementById("CC").innerHTML == "CC on"){
-   //player.loadModule("captions");
-    //player.loadModule("cc");
-    //document.getElementById("CC").innerHTML = "CC off";
-  //}
- //else{
-    //player.unloadModule("captions");
-    //player.unloadModule("cc");
-    //document.getElementById("CC").innerHTML = "CC on";
-  //}
-//});
 
 
 progress.addEventListener('mouseup', function(e) {
-  socket.emit('progress', e.target.value);
+  socket.emit('progress', {newProgress: e.target.value, groupToken: groupToken});
 });
 
 //Listen for events
@@ -281,6 +299,9 @@ socket.on('chat', function(data){
     console.log("8");
     scrollToBottom();
   }
+});
+socket.on('enterChat', function(data){
+  output.innerHTML += '<p>' + data + '</p>';
 });
 socket.on('typing', function(data){
   feedback.innerHTML = '<p><em>' + data + ' is typing a message...</em></p>';

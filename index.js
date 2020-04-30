@@ -20,46 +20,50 @@ var io = socket(server);
 io.on('connection', function(socket){
 	console.log('made socket connection', socket.id);
 
+	socket.on('create', function(room){
+		socket.join(room);
+	});
+
+	socket.on('join', function(room){
+		socket.join(room);
+	});
+
+	socket.on('enterChat', function(data){
+		io.in(data.groupToken).emit('enterChat', data.message);
+	});
+
 	socket.on('play', function(data){
-		io.sockets.emit('play', data);
-		console.log(data);
+		io.in(data).emit('play', 'play');
 	});
 	socket.on('pause', function(data){
-		io.sockets.emit('pause', data);
-		console.log(data);
+		io.in(data).emit('pause', 'pause');
 	});
 	socket.on('restart', function(data){
-		io.sockets.emit('restart', data);
-		console.log(data);
+		io.in(data).emit('restart', 'restart');
 	});
 	socket.on('goback', function(data){
-		io.sockets.emit('goback', data);
-		console.log(data);
+		io.in(data.groupToken).emit('goback', data.newTime);
 	});
 	socket.on('goforward', function(data){
-		io.sockets.emit('goforward', data);
-		console.log(data);
+		io.in(data.groupToken).emit('goforward', data.newTime);
 	});
 	socket.on('goforward2', function(data){
-		io.sockets.emit('goforward2', data);
-		console.log(data);
+		io.in(data.groupToken).emit('goforward2', data.newTime);
 	});
 	socket.on('chat', function(data){
-		io.sockets.emit('chat', data);
+		io.in(data.groupToken).emit('chat', data);
 	});
 	socket.on('typing', function(data){
-		socket.broadcast.emit('typing', data);
+		socket.to(data.groupToken).emit('typing', data.handle);
 	});
 	socket.on('progress', function(data){
-		io.sockets.emit('progress', data);
+		io.in(data.groupToken).emit('progress', data.newProgress);
 	})
 	socket.on('nextVideo', function(data){
-		io.sockets.emit('nextVideo', data);
-		console.log(data);
+		io.in(data).emit('nextVideo', 'nextVideo');
 	})
 	socket.on('previousVideo', function(data){
-		io.sockets.emit('previousVideo', data);
-		console.log(data);
+		io.in(data).emit('previousVideo', 'previousVideo');
 	})
 });
 

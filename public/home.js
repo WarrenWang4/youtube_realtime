@@ -57,11 +57,7 @@ document.getElementById("submit1").addEventListener('click', async function()  {
   let lastLink = String(document.getElementById("link").value);
   if (isYoutube(lastLink) !== false && isYoutube(lastLink) !== ""){
     linksList.push(String(document.getElementById("link").value));
-  }
-  else{
-    document.getElementById("error").style.visibility = "visible";
-  }
-  let pass = String(document.getElementById("groupPass").value);
+    let pass = String(document.getElementById("groupPass").value);
     if(CheckPassword(pass)){
       let idsList = [];
       for (const link of linksList){
@@ -72,15 +68,22 @@ document.getElementById("submit1").addEventListener('click', async function()  {
             videoIds: idsList,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
           groupPass: pass
-        }).then(() => {
+        }).then(function(docRef) {
           localStorage.setItem("idsList", JSON.stringify(idsList));
           localStorage.setItem("idsList2", JSON.stringify([""]));
+          console.log(docRef.id);
+          console.log(typeof docRef.id);
+          localStorage.setItem("groupID", docRef.id);
           window.location.href = './video.html';
       });
     }
     else{
       alert("password must be between 8 to 15 characters which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character.");
     }
+  }
+    else{
+    document.getElementById("error").style.visibility = "visible";
+  }
 });
 // });
 
@@ -108,10 +111,34 @@ document.getElementById("submit2").addEventListener('click', function() {
     localStorage.setItem("idsList2", JSON.stringify(idsList2));
     localStorage.setItem("idsList", JSON.stringify([""]));
     console.log(idsList2);
-    window.location.href = './video.html';
   });
   promise2.catch((error) => {
           console.log(error);
       });
+
+  let promise3 = new Promise((resolve, reject) => {
+  db.collection('groups').where('groupPass', '==', pass2).get().then((snapshot) => {
+      snapshot.docs.forEach(doc => {
+        if (doc.exists){
+          resolve(doc.id);
+        }
+        else{
+          console.log("uh oh");
+          reject("It appears that there does not exist a group with the password you inputted. Try again!");
+        }
+      });
+  });
+});
+  promise3.then((success) => {
+    let groupID2 = success;
+    console.log(groupID2);
+    console.log(typeof groupID2);
+    localStorage.setItem("groupID2", groupID2);
+    window.location.href = './video.html';
+  });
+  promise3.catch((error) => {
+          console.log(error);
+      });
+
 });
 // });
