@@ -7,19 +7,12 @@
 document.getElementById("error").style.visibility = "hidden";
 function isYoutube(getURL)
 {
-  if(typeof getURL!=='string') return false;
-  var newA = document.createElement('A');
-  newA.href = getURL;
-  var host = newA.hostname;
-  var srch = newA.search;
-  var path = newA.pathname;
-  
-  if(host.search(/youtube\.com|youtu\.be/)===-1) return false;
-  if(host.search(/youtu\.be/)!==-1) return path.slice(1);
-  if(path.search(/embed/)!==-1) return /embed\/([A-z0-9]+)(\&|$)/.exec(path)[1];
-  var getId = /v=([A-z0-9]+)(\&|$)/.exec(srch);
-  if(host.search(/youtube\.com/)!==-1) return !getId ? '':getId[1];
-  
+  var videoid = getURL.match(/(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?v=|\/)([^\s&]+)/);
+  if(videoid != null) {
+   return("video id = ",videoid[1]);
+ } else { 
+    return(false)
+  }
 }
 
 function CheckPassword(inputtxt) 
@@ -43,7 +36,7 @@ function CheckPassword(inputtxt)
 let linksList = [];
 document.getElementById("another").addEventListener('click', function(){
   let newLink = String(document.getElementById("link").value);
-  if (isYoutube(newLink) !== false && isYoutube(link) !== ""){
+  if (isYoutube(newLink) !== false){
     document.getElementById("error").style.visibility = "hidden";
     linksList.push(String(document.getElementById("link").value));
     document.getElementById("link").value = "";
@@ -55,35 +48,48 @@ document.getElementById("another").addEventListener('click', function(){
 });
 document.getElementById("submit1").addEventListener('click', async function()  {
   let lastLink = String(document.getElementById("link").value);
-  if (isYoutube(lastLink) !== false && isYoutube(lastLink) !== ""){
-    linksList.push(String(document.getElementById("link").value));
-    let pass = String(document.getElementById("groupPass").value);
-    if(CheckPassword(pass)){
-      let idsList = [];
-      for (const link of linksList){
-        idsList.push(isYoutube(link));
+  let pass = String(document.getElementById("groupPass").value);
+  console.log(pass);              
+  db.collection('groups').where('groupPass', '==', pass).get().then(function (querySnapshot) {
+      if (!querySnapshot.empty){
+        alert("It appears that there already exists a group with that password. Try again!");
       }
-      console.log(idsList);
-      db.collection("groups").add({
-            videoIds: idsList,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-          groupPass: pass
-        }).then(function(docRef) {
-          localStorage.setItem("idsList", JSON.stringify(idsList));
-          localStorage.setItem("idsList2", JSON.stringify([""]));
-          console.log(docRef.id);
-          console.log(typeof docRef.id);
-          localStorage.setItem("groupID", docRef.id);
-          window.location.href = './video.html';
-      });
-    }
-    else{
-      alert("password must be between 8 to 15 characters which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character.");
-    }
-  }
-    else{
-    document.getElementById("error").style.visibility = "visible";
-  }
+      else{
+        if (CheckPassword(pass)){
+          if (isYoutube(lastLink) !== false){
+            linksList.push(String(document.getElementById("link").value));
+            let idsList = [];
+            for (const link of linksList){
+              idsList.push(isYoutube(link));
+            }
+            console.log(idsList);
+            db.collection("groups").add({
+              videoIds: idsList,
+              groupPass: pass
+            }).then(function(docRef) {
+              localStorage.setItem("idsList", JSON.stringify(idsList));
+              localStorage.setItem("idsList2", JSON.stringify([""]));
+              console.log(docRef.id);
+              console.log(typeof docRef.id);
+              localStorage.setItem("groupID", docRef.id);
+              window.location.href = './video.html';
+            });
+          }
+          else{
+            document.getElementById("error").style.visibility = "visible";
+          }
+        }
+        else{
+          if (isYoutube(lastLink) !== false){
+            document.getElementById("error").style.visibility = "hidden";
+          }
+          else{
+            document.getElementById("error").style.visibility = "visible";
+          }
+          alert("password must be between 8 to 15 characters which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character.");
+        }
+      }
+    });
 });
 // });
 
@@ -92,53 +98,53 @@ document.getElementById("submit1").addEventListener('click', async function()  {
 // document.getElementById("groupPass2").style.visibility = "visible";
 document.getElementById("submit2").addEventListener('click', function() {
   let pass2 = String(document.getElementById("groupPass2").value);
-  let promise2 = new Promise((resolve, reject) => {
-  db.collection('groups').where('groupPass', '==', pass2).get().then((snapshot) => {
-      snapshot.docs.forEach(doc => {
-        if (doc.exists){
-
-         resolve(doc.data().videoIds);
-        }
-        else{
-          console.log("uh oh");
-          reject("It appears that there does not exist a group with the password you inputted. Try again!");
-        }
-      });
-  });
-});
-  promise2.then((success) => {
-    let idsList2 = success;
-    localStorage.setItem("idsList2", JSON.stringify(idsList2));
-    localStorage.setItem("idsList", JSON.stringify([""]));
-    console.log(idsList2);
-  });
-  promise2.catch((error) => {
+     db.collection('groups').where('groupPass', '==', pass2).get().then(function (querySnapshot) {
+      if (querySnapshot.empty){
+        alert("It appears that there does not exist a group with the password you inputted. Try again!");
+      }
+       else{
+        let promise2 = new Promise((resolve, reject) => {
+          db.collection('groups').where('groupPass', '==', pass2).get().then((querySnapshot) => {
+            querySnapshot.forEach(doc => {
+              if (doc.exists){
+                resolve(doc.data().videoIds);
+              }
+            });
+          });
+        });
+        promise2.then((success) => {
+          let idsList2 = success;
+          localStorage.setItem("idsList2", JSON.stringify(idsList2));
+          localStorage.setItem("idsList", JSON.stringify([""]));
+          console.log(idsList2);
+        });
+        promise2.catch((error) => {
           console.log(error);
-      });
-
-  let promise3 = new Promise((resolve, reject) => {
-  db.collection('groups').where('groupPass', '==', pass2).get().then((snapshot) => {
-      snapshot.docs.forEach(doc => {
-        if (doc.exists){
-          resolve(doc.id);
-        }
-        else{
-          console.log("uh oh");
-          reject("It appears that there does not exist a group with the password you inputted. Try again!");
-        }
-      });
-  });
-});
-  promise3.then((success) => {
-    let groupID2 = success;
-    console.log(groupID2);
-    console.log(typeof groupID2);
-    localStorage.setItem("groupID2", groupID2);
-    window.location.href = './video.html';
-  });
-  promise3.catch((error) => {
+        });
+        let promise3 = new Promise((resolve, reject) => {
+          db.collection('groups').where('groupPass', '==', pass2).get().then((querySnapshot) => {
+            querySnapshot.forEach(doc => {
+              if (doc.exists){
+                resolve(doc.id);
+              }
+              else{
+                console.log("uh oh");
+                reject("It appears that there does not exist a group with the password you inputted. Try again!");
+              }
+            });
+          });
+        });
+        promise3.then((success) => {
+          let groupID2 = success;
+          console.log(groupID2);
+          console.log(typeof groupID2);
+          localStorage.setItem("groupID2", groupID2);
+          window.location.href = './video.html';
+        });
+        promise3.catch((error) => {
           console.log(error);
-      });
-
+        });
+      }
+    });
 });
-// });
+
