@@ -1,3 +1,4 @@
+// Initialize Firebase Authenticator
 var provider = new firebase.auth.GoogleAuthProvider();
 
 function signIn() {
@@ -7,14 +8,6 @@ function signIn() {
       var token = result.credential.accessToken;
       var user = result.user;
       
-      // Testing different outputs to see what to use in database
-      console.log(token);
-      console.log(user);
-
-      console.log(user.displayName);
-      console.log(user.uid);
-      // end test
-
       window.location = 'home.html'
 
    }).catch(function(error) {
