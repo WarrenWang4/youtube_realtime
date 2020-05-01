@@ -145,7 +145,9 @@ function onPlayerStateChange(event){
     }
     else if (currentVideoId == 0){
       document.getElementById("previousVideo").style.visibility = "hidden";
-      document.getElementById("nextVideo").style.visibility = "visible";
+      if (videos.length != 1) {
+        document.getElementById("nextVideo").style.visibility = "visible";
+      }
     }
   }
 }
