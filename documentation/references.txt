@@ -1,0 +1,23 @@
+1.) https://stackoverflow.com/questions/3452546/how-do-i-get-the-youtube-video-id-from-a-url
+The above link (to a Stack Overfow page) was used in home.js to determine if the inputted URL is a Youtube video URL.
+
+2.) https://www.w3resource.com/javascript/form/password-validation.php
+Above link was used in home.js and provided us with a password verifier (one that accepts passwords between 8 to 15 characters which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character).
+
+3.) https://developers.google.com/youtube/iframe_api_reference
+Above link is to the Youtube API that we used to create a video player. We used the player set-up code given in the API to set up the player and also implemented functions and events from the API. Used in chat.js.
+
+4.) https://stackoverflow.com/questions/6312993/javascript-seconds-to-time-string-with-format-hhmmss
+The above link (to a Stack Overflow page) was used in chat.js to convert the inputted time (in seconds) to a colon-separated time string.
+
+5.) https://stackoverflow.com/questions/9313216/example-youtube-playlist-code
+Drew inspiration from contributor Sahil Kashyap's post to the above Stack Overflow page to help us use the Youtube API video player to play a playlist of videos (chat.js).
+
+6.) https://github.com/iamshaunjp/websockets-playlist
+Above is a link to the github repo made by a Youtuber named "Net Ninja" for a Web Sockets tutorial he made on youtube. The chat portion of our app drew inspiration from the chat app that he built in his youtube video. We mainly used the link to the above repo for html and css purposes (chat.js, video.html, and styles.css).
+
+7.) https://stackoverflow.com/questions/39055567/run-a-countdown-timer-depending-on-youtube-video-current-time
+Used contributer Peter Sherif's post to the above Stack Overflow page to create a timer depending on YouTube video current time that could be shown to the user.
+
+8.) https://www.w3schools.com/w3css/tryw3css_templates_start_page.htm#
+Used in index.html as a base for our landing page.
