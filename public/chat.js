@@ -99,9 +99,6 @@ function onPlayerReady(event){
   progress.max = player.getDuration();
 }
 
-
-//    The function indicates that when playing a video (state=1),
-//    the player should play for six seconds and then stop.
 var done = false;
 //The following function takes the inputted number of seconds and returns the equivalent normal time display (hh:mm:ss) so that the time remaining in the video can be displayed to the user.
 function formatTime(seconds){
