@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>index.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="../docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="auth.html">
+                  public/auth.js
+                </a>
+              
+                
+                <a class="source" href="chat.html">
+                  public/chat.js
+                </a>
+              
+                
+                <a class="source" href="home.html">
+                  public/home.js
+                </a>
+              
+                
+                <a class="source" href="index.html">
+                  public/index.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>index.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>Include express and socket.io modules.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>);
+<span class="hljs-keyword">var</span> socket = <span class="hljs-built_in">require</span>(<span class="hljs-string">'socket.io'</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>App setup</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> app = express();
+
+<span class="hljs-comment">/*var server = app.listen(5000, function(){
+	console.log('listening to Heroku port');
+});*/</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Server setup</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> server = app.listen(process.env.PORT || <span class="hljs-number">5000</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+	<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'listening to Heroku port'</span>);
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Static files</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>app.use(express.static(<span class="hljs-string">'public'</span>));</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Socket setup</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> io = socket(server);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Callback function below fires when server makes a socket connection with a client</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>io.on(<span class="hljs-string">'connection'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">socket</span>)</span>{
+	<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'made socket connection'</span>, socket.id);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>When server receives “create” message from th client through the socket, the server subscribes the socket to the channel (group security token) provided by client.
+Basically, the server adds the client to a room. The room’s number identifier is group security token provided by the client when it sent the “chat” message down the socket to the server.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	socket.on(<span class="hljs-string">'create'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">room</span>)</span>{
+		socket.join(room);
+	});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Same process that occurs when server receives a “create” message occurs when server receives a “join” message.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	socket.on(<span class="hljs-string">'join'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">room</span>)</span>{
+		socket.join(room);
+	});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>When server receives an “enterChat” message from client, the server relays an “enterChat” message to every client in the room of the client that originally sent the “enterChat” message.
+In other words, the server sends an “enterChat” message down every socket within the channel (or group) of the client who originally sent the “enterChat” message.
+The server knows the group of the client who originally sent the “enterChat” message because part of the “data” sent by the client included the group security token, which is the identifier for the group.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	socket.on(<span class="hljs-string">'enterChat'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)</span>{
+		io.in(data.groupToken).emit(<span class="hljs-string">'enterChat'</span>, data.message);
+	});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>When server receives “play” request from client through the socket, the server relays a “play” message to every client in the specified group.
+Again, the server konws the specified group because part of the “data” sent by the client who sent the play request is the group security token, which identifies the room the client who sent the play request is in. </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	socket.on(<span class="hljs-string">'play'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)</span>{
+		io.in(data).emit(<span class="hljs-string">'play'</span>, <span class="hljs-string">'play'</span>);
+	});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Same thing that happens when server receives “play” request occurs except a “pause” message is sent down all sockets within the group of the orginal sender of the request.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	socket.on(<span class="hljs-string">'pause'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)</span>{
+		io.in(data).emit(<span class="hljs-string">'pause'</span>, <span class="hljs-string">'pause'</span>);
+	});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Same thing that happens when server receives “play” request occurs except a “restart” message is sent down all sockets within the group of the orginal sender of the request.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	socket.on(<span class="hljs-string">'restart'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)</span>{
+		io.in(data).emit(<span class="hljs-string">'restart'</span>, <span class="hljs-string">'restart'</span>);
+	});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>When server receives “goback” message, server relays the “goback” message down all sockets within the channel of the socket down which the original request was sent.
+In other words, server relays the “goback” message to all clients who are within the group of the client who originally sent the “goback” request down the socket</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	socket.on(<span class="hljs-string">'goback'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)</span>{
+		io.in(data.groupToken).emit(<span class="hljs-string">'goback'</span>, data.newTime);
+	});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Same thing that occurs when server recieves a “goback” message occurs here, except a “goforward” messsage is sent to all clients within the specified group.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	socket.on(<span class="hljs-string">'goforward'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)</span>{
+		io.in(data.groupToken).emit(<span class="hljs-string">'goforward'</span>, data.newTime);
+	});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Same thing as “goforward” event except this time a “goforward2” message is sent to all clients in the specified group (this is the case for when a group member clicked “go forward” button that would have resulted in a time outside the duration of the video).</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	socket.on(<span class="hljs-string">'goforward2'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)</span>{
+		io.in(data.groupToken).emit(<span class="hljs-string">'goforward2'</span>, data.newTime);
+	});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>When server receives “chat” message it relays the message to all clients within the group of the client who originally sent the “chat” request.
+This enables all members of group to get the chat message.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	socket.on(<span class="hljs-string">'chat'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)</span>{
+		io.in(data.groupToken).emit(<span class="hljs-string">'chat'</span>, data);
+	});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Same thing as chat message except this is for if someone is currently typing a message.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	socket.on(<span class="hljs-string">'typing'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)</span>{
+		socket.to(data.groupToken).emit(<span class="hljs-string">'typing'</span>, data.handle);
+	});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>When server receives a “progress” message, it relays it to all members within group of sender.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	socket.on(<span class="hljs-string">'progress'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)</span>{
+		io.in(data.groupToken).emit(<span class="hljs-string">'progress'</span>, data.newProgress);
+	});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>When server receives a “nextVideo” message, it relays it to all memebers within group of client who originally sent the “nextVideo” message.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	socket.on(<span class="hljs-string">'nextVideo'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)</span>{
+		io.in(data).emit(<span class="hljs-string">'nextVideo'</span>, <span class="hljs-string">'nextVideo'</span>);
+	});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Same thing as “nextVideo” case except this time a “previousVideo” message is relayed to all members of the group of the sender.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	socket.on(<span class="hljs-string">'previousVideo'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)</span>{
+		io.in(data).emit(<span class="hljs-string">'previousVideo'</span>, <span class="hljs-string">'previousVideo'</span>);
+	});
+});</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

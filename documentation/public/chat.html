@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>chat.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="../docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="auth.html">
+                  public/auth.js
+                </a>
+              
+                
+                <a class="source" href="chat.html">
+                  public/chat.js
+                </a>
+              
+                
+                <a class="source" href="home.html">
+                  public/home.js
+                </a>
+              
+                
+                <a class="source" href="index.html">
+                  public/index.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>chat.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"previousVideo"</span>).style.visibility = <span class="hljs-string">"hidden"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Web socket connection is established between client and public server.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> socket = io.connect(<span class="hljs-string">'https://youtube-with-friends.herokuapp.com/'</span>); <span class="hljs-comment">// use http://localhost:5000/ or https://youtube-with-friends.herokuapp.com/</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Firebase is configured.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> firebaseConfig = {
+  <span class="hljs-attr">apiKey</span>: <span class="hljs-string">"AIzaSyAXz1hDMesciBYe-Hj5n_xHmatymT6PWGo"</span>,
+  <span class="hljs-attr">authDomain</span>: <span class="hljs-string">"realtime-fbbc9.firebaseapp.com"</span>,
+  <span class="hljs-attr">databaseURL</span>: <span class="hljs-string">"https://realtime-fbbc9.firebaseio.com"</span>,
+  <span class="hljs-attr">projectId</span>: <span class="hljs-string">"realtime-fbbc9"</span>,
+  <span class="hljs-attr">storageBucket</span>: <span class="hljs-string">"realtime-fbbc9.appspot.com"</span>,
+  <span class="hljs-attr">messagingSenderId</span>: <span class="hljs-string">"868489312223"</span>,
+  <span class="hljs-attr">appId</span>: <span class="hljs-string">"1:868489312223:web:e7c19ecd40567f72a4b66a"</span>,
+  <span class="hljs-attr">measurementId</span>: <span class="hljs-string">"G-P2DKFZMLFR"</span>
+};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Firebase is initialized.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>firebase.initializeApp(firebaseConfig);
+<span class="hljs-keyword">const</span> db = firebase.firestore();
+firebase.analytics();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Authentication is initialized.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> auth = firebase.auth();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>User is initialized.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">let</span> user = firebase.auth().currentUser;
+<span class="hljs-keyword">let</span> userName2 = <span class="hljs-string">""</span>;
+<span class="hljs-keyword">let</span> handle = <span class="hljs-string">""</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>“videos” is assigned to the “idsList” array stored within local storage. “idsList” variable was set in “home.js”.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">let</span> videos = <span class="hljs-built_in">JSON</span>.parse(localStorage.getItem(<span class="hljs-string">"idsList"</span>));
+<span class="hljs-keyword">let</span> groupToken = <span class="hljs-string">""</span>;
+<span class="hljs-keyword">let</span> didCreate = <span class="hljs-literal">false</span>;
+<span class="hljs-keyword">if</span> (videos[<span class="hljs-number">0</span>] == <span class="hljs-string">""</span>){</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>if videos[0] == “”, then the “idsList” array was set to “”. This means that the “idsList2” variable must have been set in “home.js”, indicating that the user is joining a group.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  videos = <span class="hljs-built_in">JSON</span>.parse(localStorage.getItem(<span class="hljs-string">"idsList2"</span>));</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>“groupToken” is set to the group security token stored inside “groupID2”. We know that “groupID2” was set in home.js because we know the user is joining a group.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  groupToken = localStorage.getItem(<span class="hljs-string">"groupID2"</span>);
+}
+<span class="hljs-keyword">else</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>if videos[0] != “”, then we do not change the value of “videos”. This means that the value of videos will be that of the “idsList” variable within local storage, which is good because we know that the user is creating a group.
+“groupToken” is then set to the “groupID” variable stored within local storage. This is good because the “groupID” variable would have been set in “home.js” if the user is creating a group. And, that is the case if we have gotten to this else branch: the user is creating a group.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  groupToken = localStorage.getItem(<span class="hljs-string">"groupID"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>“didCreate” is set to true because we know that the user is creating a group.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  didCreate = <span class="hljs-literal">true</span>;
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>If the user is currently signed in (which they will be upon entering the “video.html” page), an ‘enterChat’ message is sent to the server with a message. 
+The message includes a string saying the user has entered the chat and the group security token “groupToken” that will enable the user to join their group.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>firebase.auth().onAuthStateChanged(<span class="hljs-function">(<span class="hljs-params">user</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (user){
+    handle = user.displayName;
+    socket.emit(<span class="hljs-string">'enterChat'</span>, {
+      <span class="hljs-attr">message</span>: user.displayName + <span class="hljs-string">" has entered the chat"</span>,
+      <span class="hljs-attr">groupToken</span>: groupToken
+    });
+  }
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>If the user is creating a group, then a ‘create’ message is sent down the web socket to the server.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">if</span> (didCreate){
+  socket.emit(<span class="hljs-string">'create'</span>, groupToken);
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>If the user is joining a group, then a ‘join’ message is sent down the web socket to the server.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">else</span>{
+  socket.emit(<span class="hljs-string">'join'</span>, groupToken);
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>“currentVideoId” is set to 0 because we are assuming that the group wants to watch the videos in order in which they were inputted.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">let</span> currentVideoId = <span class="hljs-number">0</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>If the length of the “videos” array (which includes either the video ID’s of the URL’s chosen by the user or the video ID’s of the URL’s chosen by the creator of the group) is 1, then the “nextVideo” button is hidden (there is no next video).</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">if</span> (videos.length == <span class="hljs-number">1</span>){
+  <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"nextVideo"</span>).style.visibility = <span class="hljs-string">"hidden"</span>;
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Youtube Player initialization</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> tag = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'script'</span>);
+tag.src = <span class="hljs-string">"https://www.youtube.com/iframe_api"</span>;
+<span class="hljs-keyword">var</span> firstScriptTag = <span class="hljs-built_in">document</span>.getElementsByTagName(<span class="hljs-string">'script'</span>)[<span class="hljs-number">0</span>];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>This function creates an iframe (and YouTube player)
+   after the API code downloads.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> player;
+<span class="hljs-keyword">let</span> progress = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"progress"</span>);
+<span class="hljs-keyword">let</span> timer = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"timer"</span>);
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onYouTubeIframeAPIReady</span>(<span class="hljs-params"></span>)</span>{
+  player = <span class="hljs-keyword">new</span> YT.Player(<span class="hljs-string">'player'</span>, {
+    <span class="hljs-attr">height</span>: <span class="hljs-string">'700'</span>,
+    <span class="hljs-attr">width</span>: <span class="hljs-string">'1400'</span>,
+    <span class="hljs-attr">videoId</span>: videos[currentVideoId],
+    <span class="hljs-attr">events</span>: {
+      <span class="hljs-string">'onReady'</span>: onPlayerReady,
+      <span class="hljs-string">'onStateChange'</span>: onPlayerStateChange
+    },
+    <span class="hljs-attr">playerVars</span>: {
+      <span class="hljs-string">'controls'</span>:<span class="hljs-number">0</span>,
+      <span class="hljs-string">'disablekd'</span>:<span class="hljs-number">1</span>,
+      <span class="hljs-string">'modestbranding'</span>:<span class="hljs-number">1</span>,
+      <span class="hljs-string">'rel'</span>:<span class="hljs-number">0</span>,
+      <span class="hljs-string">'showinfo'</span>:<span class="hljs-number">0</span>,
+      <span class="hljs-string">'autohide'</span>:<span class="hljs-number">1</span>
+    }
+  });
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>The API will call this function when the video player is ready.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onPlayerReady</span>(<span class="hljs-params">event</span>)</span>{
+  timeLoop();
+  progress.max = player.getDuration();
+}
+
+<span class="hljs-keyword">var</span> done = <span class="hljs-literal">false</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>The following function takes the inputted number of seconds and returns the equivalent normal time display (hh:mm:ss) so that the time remaining in the video can be displayed to the user.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">formatTime</span>(<span class="hljs-params">seconds</span>)</span>{
+  <span class="hljs-keyword">var</span> minutes = <span class="hljs-built_in">Math</span>.floor(seconds / <span class="hljs-number">60</span>);
+  minutes = (minutes &gt;= <span class="hljs-number">10</span>) ? minutes : minutes;
+  <span class="hljs-keyword">var</span> hours = <span class="hljs-built_in">Math</span>.floor(minutes / <span class="hljs-number">60</span>);
+  hours = (minutes &gt;= <span class="hljs-number">10</span>) ? hours : hours;
+  <span class="hljs-keyword">var</span> seconds = <span class="hljs-built_in">Math</span>.floor(seconds % <span class="hljs-number">60</span>);
+  seconds = (seconds &gt;= <span class="hljs-number">10</span>) ? seconds : seconds;
+  <span class="hljs-keyword">return</span> hours + <span class="hljs-string">":"</span> + minutes + <span class="hljs-string">":"</span> + seconds;
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>The API calls this function when the player’s state changes (such as from PLAYING to ENDED).</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onPlayerStateChange</span>(<span class="hljs-params">event</span>)</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>If the player’s current state is now ENDED (meaning the video is over), then play button turns into a “Watch Again” button for the user so the user has the option to watch the video again.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (event.data == YT.PlayerState.ENDED){
+    <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"playBtn"</span>).innerHTML = <span class="hljs-string">"Watch again"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>“timeout_setter” is cleared to 00:00:00 because either the next video is going to be starting (if there is a next video) or the video is going to restart.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    clearTimeout(timeout_setter);
+  }
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (event.data == YT.PlayerState.PLAYING){</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>if the player’s current state is now PLAYING, the (changing) time of the video is displayed to the user.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    myTimer = <span class="hljs-keyword">set</span><span class="hljs-title">Interval</span>(<span class="hljs-params">function(</span>){
+      <span class="hljs-keyword">var</span> time;
+      currentTime = formatTime(player.getCurrentTime());
+      totalTime = formatTime(player.getDuration());
+      timer.innerHTML = currentTime + <span class="hljs-string">"/"</span> + totalTime;
+    }, <span class="hljs-number">100</span>);
+    <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"playBtn"</span>).innerHTML = <span class="hljs-string">"Pause"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>If there is a video currently being played, then the “timeLoop” function is called so that the progress bar knob moves forward corresponding with the current time in the video.
+The max value of the progress bar is also set to the duration of the currently playing video.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (currentVideoId &gt;= <span class="hljs-number">0</span>){
+      timeLoop();
+      progress.max = player.getDuration();
+    }
+    <span class="hljs-keyword">if</span> (currentVideoId == videos.length - <span class="hljs-number">1</span>){
+      <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"nextVideo"</span>).style.visibility = <span class="hljs-string">"hidden"</span>;
+    } 
+    <span class="hljs-keyword">else</span>{
+      <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"nextVideo"</span>).style.visibility = <span class="hljs-string">"visible"</span>;
+    }
+    <span class="hljs-keyword">if</span> (currentVideoId &gt;= <span class="hljs-number">1</span>){
+
+      <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"previousVideo"</span>).style.visibility = <span class="hljs-string">"visible"</span>;
+    }
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (currentVideoId == <span class="hljs-number">0</span>){
+      <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"previousVideo"</span>).style.visibility = <span class="hljs-string">"hidden"</span>;
+      <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"nextVideo"</span>).style.visibility = <span class="hljs-string">"visible"</span>;
+    }
+  }
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>The function below dynamically sets the current value of the progress bar to match the current time of the video. “timeout_setter” is also initialized.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">timeLoop</span>(<span class="hljs-params"></span>)</span>{
+  progress.value = player.getCurrentTime();
+  timeout_setter = <span class="hljs-keyword">set</span><span class="hljs-title">Timeout</span>(<span class="hljs-params">timeLoop, <span class="hljs-number">1000</span></span>);
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>An event listener for “click” is added to the “nextVideo” button.
+If the user clicks it, then a ‘nextVideo’ message is sent down the socket to the server, along with the “groupToken” so that the server knows which group the “next video” request is coming from.
+This is important because the server needs to know which sockets to send the ‘nextVideo’ message to.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"nextVideo"</span>).addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+  socket.emit(<span class="hljs-string">'nextVideo'</span>, groupToken);
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>Same thing as what occurs if the “nextVideo” button’s “click” event listener hears a click occurs here, except in this case the request is to go to the previous video in the playlist.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"previousVideo"</span>).addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+  socket.emit(<span class="hljs-string">'previousVideo'</span>, groupToken);
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>Query DOM</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> message = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'message'</span>);
+    handle = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'handle'</span>),
+    btn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'send'</span>),
+    output = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'output'</span>),
+    feedback = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'feedback'</span>),
+    mute = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'mute'</span>),
+    volinc = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'volinc'</span>),
+    vocdec = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'voldec'</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>Event listener for “click” is added to “playBtn” button.
+If event occurs and the current innerHTML of the button equals “Play”, then a play request is sent to the server.
+If current innerHTML is “Pause”, a pause request is sent to the server, and otherwise a “restart” request is sent to the server (because the innerHTML must be “Watch Again”).</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"playBtn"</span>).addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+  <span class="hljs-keyword">if</span> (<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"playBtn"</span>).innerHTML == <span class="hljs-string">"Play"</span>){
+    socket.emit(<span class="hljs-string">'play'</span>, groupToken);
+  }
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"playBtn"</span>).innerHTML == <span class="hljs-string">"Pause"</span>){
+    socket.emit(<span class="hljs-string">'pause'</span>, groupToken);
+  }
+  <span class="hljs-keyword">else</span>{
+    socket.emit(<span class="hljs-string">'restart'</span>, groupToken);
+  }
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>Event listener for “click” is added to “goback” button.
+If event occurs, the new time of the video (“newTime”) should be ten seconds before the current time of the video (since the user wants to go backwards in time in the video).
+A ‘goback’ request is then sent to the server, with an object  “goBackObj” containing the new time the user wants to go to in the video (current time minus 10 seconds) and the group Token so that the server knows which group the request is for.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"goback"</span>).addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+  <span class="hljs-keyword">var</span> newTime = player.getCurrentTime() - <span class="hljs-number">10</span>;
+  <span class="hljs-keyword">let</span> goBackObj = {
+    <span class="hljs-attr">groupToken</span>: groupToken,
+    <span class="hljs-attr">newTime</span>: newTime
+  }
+  socket.emit(<span class="hljs-string">'goback'</span>, goBackObj);
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>Same thing that occurs if the “goback” button’s event listener hears a click occurs here, except this time a “go forward” request is sent to the server so that the group can skip forward ten seconds in the video.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"goforward"</span>).addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+  <span class="hljs-keyword">var</span> newTime = player.getCurrentTime() + <span class="hljs-number">10</span>;
+  <span class="hljs-keyword">let</span> goForwardObj = {
+    <span class="hljs-attr">groupToken</span>: groupToken,
+    <span class="hljs-attr">newTime</span>: newTime
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>Different “go forward” messages are sent down the socket depending on if the current time plus ten seconds would be within the duration of the video.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (newTime &lt;= player.getDuration()){
+    socket.emit(<span class="hljs-string">'goforward'</span>, goForwardObj);
+  }
+  <span class="hljs-keyword">else</span>{
+    newTime = player.getDuration();
+    socket.emit(<span class="hljs-string">'goforward2'</span>, goForwardObj);
+  }
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>Event listener for “click” is added to “btn”, which is the “send” button for a chat message.
+When “click” event occurs, a “chat” message is sent down the socket to the server containing the value contained within the “message” input field, the “handle” (current user’s name acquired from Google Auth), and the group Token (which again is necessary for server to know which group the message is coming from).</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>btn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+  socket.emit(<span class="hljs-string">'chat'</span>, {
+    <span class="hljs-attr">message</span>: message.value,
+    <span class="hljs-attr">handle</span>: handle,
+    <span class="hljs-attr">groupToken</span>: groupToken
+  });
+  message.value = <span class="hljs-string">""</span>;
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>Event listener for “keypress” is added to the “message” input field.
+Now, when the user is in the process of typing a chat message, a “typing” message is sent to the server so that everyone else in the group can know that the user is currently typing a chat message.
+The handle is included so the other group members know where the message is coming from, along with the group token so the server knows which sockets to relay the “typing” message to.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>message.addEventListener(<span class="hljs-string">'keypress'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+  socket.emit(<span class="hljs-string">'typing'</span>, {
+    <span class="hljs-attr">handle</span>: handle,
+    <span class="hljs-attr">groupToken</span>: groupToken
+    });
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <p>Event listener for “click” is added to the “mute” button.
+Now, when the “mute” button is clicked, the video mutes (or unmutes) for the user depending on the innerHTML of the button.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>mute.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+  <span class="hljs-keyword">if</span> (mute.innerHTML == <span class="hljs-string">"Mute"</span>){
+    player.mute();
+    mute.innerHTML = <span class="hljs-string">"Unmute"</span>;
+  }
+  <span class="hljs-keyword">else</span>{
+    player.unMute();
+    mute.innerHTML = <span class="hljs-string">"Mute"</span>;
+  }
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <p>Event listener for “click” is added to “volinc”, which is the “volume increase” button.
+When clicked, the volume of the video will be increased for the user.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>volinc.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+  <span class="hljs-keyword">if</span> (player.getVolume() + <span class="hljs-number">10</span> &lt;= <span class="hljs-number">100</span>){
+    player.setVolume(player.getVolume() + <span class="hljs-number">10</span>);
+  }
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <p>Same thing that occurs when user clicks “volinc” button occurs when user clicks “voldec” button, except instead, the volume of the video decreases for the user.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>voldec.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+  <span class="hljs-keyword">if</span> (player.getVolume() - <span class="hljs-number">10</span> &gt;= <span class="hljs-number">0</span>){
+    player.setVolume(player.getVolume() - <span class="hljs-number">10</span>);
+  }
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
+              </div>
+              <p>Event listener for “mouseup” is added to the progress bar.
+Now, right at the moment when the user lets go of the progress bar knob after dragging it to a different time in the video, a “progress” message is sent down the socket to the server including the new time that the video will play at for all of the members of the group and the group token.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>progress.addEventListener(<span class="hljs-string">'mouseup'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>{
+  socket.emit(<span class="hljs-string">'progress'</span>, {<span class="hljs-attr">newProgress</span>: e.target.value, <span class="hljs-attr">groupToken</span>: groupToken});
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-40">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-40">&#182;</a>
+              </div>
+              <p>Listen for messages from server
+When the event occurs in which the client receives a “play” message from the server, the video will play for the client.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>socket.on(<span class="hljs-string">'play'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)</span>{
+  player.playVideo();
+  <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"playBtn"</span>).innerHTML = <span class="hljs-string">"Pause"</span>;
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-41">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-41">&#182;</a>
+              </div>
+              <p>When the event occurs in which the client receives a “pause” message from the server, the video will pause for the client.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>socket.on(<span class="hljs-string">'pause'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)</span>{
+  player.pauseVideo();
+  <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"playBtn"</span>).innerHTML = <span class="hljs-string">"Play"</span>;
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-42">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-42">&#182;</a>
+              </div>
+              <p>When the event occurs in which the client receives a “restart” message from the server, the video will restart for the client.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>socket.on(<span class="hljs-string">'restart'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)</span>{
+  player.seekTo(<span class="hljs-number">0</span>);
+  timeLoop();
+  <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"playBtn"</span>).innerHTML = <span class="hljs-string">"Pause"</span>;
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-43">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-43">&#182;</a>
+              </div>
+              <p>When client receives “go back” message from server, the video will go back ten seconds in time for the client using the player’s “seekTo” function. The progress bar for the client is also adjusted accordingly.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>socket.on(<span class="hljs-string">'goback'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)</span>{
+  player.seekTo(data);
+  progress.value = (player.getCurrentTime()/player.getDuration() - <span class="hljs-number">10</span>);
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-44">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-44">&#182;</a>
+              </div>
+              <p>Same thing that occurs when client receives a “go back” message from the server occurs below, except this time the client’s video player skips forward ten seconds in the video. </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>socket.on(<span class="hljs-string">'goforward'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)</span>{
+  player.seekTo(data);
+  progress.value = (player.getCurrentTime()/player.getDuration() + <span class="hljs-number">10</span>);
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-45">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-45">&#182;</a>
+              </div>
+              <p>If client receives a “goforward2” message from the server, that means that the person who skipped forward in the video skipped to a time outside the duration of the video.
+As a result, the timer displays that the video is complete, and the progress bar knob is set to the end of the video.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>socket.on(<span class="hljs-string">'goforward2'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)</span>{
+  timer.innerHTML = data + <span class="hljs-string">"/"</span> + data;
+  player.seekTo(data);
+  progress.value = data;
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-46">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-46">&#182;</a>
+              </div>
+              <p>If event occurs where socket receives a “chat” message, the innerHTML of the “feedback” div saying “so and so is typing” is set to “” (because the message has already been sent).
+Additionally, chat message sent by the server to the client is added to the innerHTML of the output div, so that the client can see the new chat message that someone in the group has sent.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>socket.on(<span class="hljs-string">'chat'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)</span>{
+  feedback.innerHTML = <span class="hljs-string">""</span>;
+  output.innerHTML += <span class="hljs-string">'&lt;p&gt;&lt;strong&gt;'</span> + data.handle + <span class="hljs-string">':&lt;/strong&gt;'</span> + <span class="hljs-string">' '</span> + data.message + <span class="hljs-string">'&lt;/p&gt;'</span>;
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-47">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-47">&#182;</a>
+              </div>
+              <p>If event occurs where socket receives an “enterChat” message, then the client will see a message in the chat window saying that someone has entered the chat.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>socket.on(<span class="hljs-string">'enterChat'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)</span>{
+  output.innerHTML += <span class="hljs-string">'&lt;p&gt;'</span> + data + <span class="hljs-string">'&lt;/p&gt;'</span>;
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-48">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-48">&#182;</a>
+              </div>
+              <p>If client receives “typing” message from server, then the message “so and so is typing a message” is added to the innerHTML of the “feedback” div on the client’s page.
+This enables the client to see that someone in the group is currently typing a message.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>socket.on(<span class="hljs-string">'typing'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)</span>{
+  feedback.innerHTML = <span class="hljs-string">'&lt;p&gt;&lt;em&gt;'</span> + data + <span class="hljs-string">' is typing a message...&lt;/em&gt;&lt;/p&gt;'</span>;
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-49">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-49">&#182;</a>
+              </div>
+              <p>If client receives a “progress” message from server, then the progress bar of the client’s video-watching page is set to whatever value was sent by the server.
+The value sent by the server is a time value, so the client’s progress bar will be set to whatever time was sent to it by the server. The client’s timer will update accordingly as well.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>socket.on(<span class="hljs-string">'progress'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)</span>{
+  player.seekTo(data);
+  progress.value = data;
+  timer.innerHTML = formatTime(data) + <span class="hljs-string">"/"</span> + formatTime(player.getDuration());
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-50">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-50">&#182;</a>
+              </div>
+              <p>In the event that the client receives a “next video” message from the server, the client’s video player will go to to the next video in the group’s playlist.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>socket.on(<span class="hljs-string">'nextVideo'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)</span>{
+  currentVideoId++;
+  player.loadVideoById(videos[currentVideoId]);
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-51">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-51">&#182;</a>
+              </div>
+              <p>Same thing that occurs when client receives a “next video” message from the server occurs here, except the client’s video player will go to the previous video in the group’s playlist.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>socket.on(<span class="hljs-string">'previousVideo'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)</span>{
+  currentVideoId --;
+  player.loadVideoById(videos[currentVideoId]);
+});</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
