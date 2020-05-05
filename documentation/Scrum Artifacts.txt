@@ -1,4 +1,6 @@
-﻿Product Backlog:
+﻿Project 2 & 3
+
+Product Backlog:
 * Set up a GitHub repo (10 mins)
 * Set up a database (4 hours including learning Firebase)
 * Set up Node.js (2 hours)
@@ -10,48 +12,68 @@
 * Users have access to a private chat within their groups. The chat indicates if they have entered or left the chat. (5 hours)
 * Design and style everything (1 hour)
 
+Revised Product Backlog:
+As we clearly planned out what features to build to keep our Minimum Viable Product as simple as possible,
+we were able to complete everything from the above product backlog.
+* Develop Test Suite for our final product (3 hours)
+
 
 Sprint Backlog:
-* Sprint number 1: 
-   * Set up Github Repo
-   * Set up database
-   * Set up Node.js
-* Sprint number 2:
-   * Set up HTML/CSS
-   * Create landing page
-* Sprint number 3:
-   * Implement the YouTube API
-   * Use Socket.io to create the realtime video feature
-* Sprint number 4:
-   * Use Firebase Auth for logging in
-   * Add ability to create a group
-   * Add ability to join a group
-* Sprint number 5:
-   * Create a private chat
-   * Design and style
-   * Test and debug
+Project 2:
+   * Sprint number 1: 
+      * Set up Github Repo
+      * Set up database
+      * Set up Node.js
+   * Sprint number 2:
+      * Set up HTML/CSS
+      * Create landing page
+   * Sprint number 3:
+      * Implement the YouTube API
+      * Use Socket.io to create the realtime video feature
+   * Sprint number 4:
+      * Use Firebase Auth for logging in
+      * Add ability to create a group
+      * Add ability to join a group
+   * Sprint number 5:
+      * Create a private chat
+      * Design and style
+      * Test and debug
+Project 3:
+   * Sprint number 6:
+      * Develop Test suite for final product
 
 
 Meeting log:
-* Meeting 1 (March 27 2020, 3pm, Remote):
-   * Brainstorm ideas.
-   * Decided on an app that allows users to watch Youtube with friends and family in real time.
-* Meeting 2 (April 1 2020, 3pm, Remote):
-   * Designed the app.
-   * Divided roles.
-   * Decided on which technologies, frameworks, and languages to use.
-* Meeting 3 (April 5 2020, 3pm, Remote):
-   * Met for Sprint number 2
-* Meeting 4 (April 9 2020, 3pm, Remote):
-   * Met for Sprint number 3
-* Meeting 5 (April 16 2020, 3pm, Remote):
-   * Met for Sprint number 4
-   * Discussed bugs that appeared after sprint number 3.
-   * Brainstormed how to debug it.
-* Meeting 6 (April 23 2020, 3pm, Remote):
-   * Met for Sprint number 5
-   * Discussed bugs that appeared after sprint number 4.
-   * Brainstormed how to debug it.
-   * Plan to test all features.
-* Meeting 7 (April 30 2020, 3pm, Remote):
-   * Tested and finalized project.
+Project 2
+   * Meeting 1 (March 27 2020, 3pm, Remote):
+      * Brainstorm ideas
+      * Decided on an app that allows users to watch Youtube with friends and family in real time
+   * Meeting 2 (April 1 2020, 3pm, Remote):
+      * Designed the app
+      * Divided roles
+      * Decided on which technologies, frameworks, and languages to use
+   * Meeting 3 (April 5 2020, 3pm, Remote):
+      * Met for Sprint number 2
+   * Meeting 4 (April 9 2020, 3pm, Remote):
+      * We completed Sprint number 2 
+      * Met for Sprint number 3
+   * Meeting 5 (April 16 2020, 3pm, Remote):
+      * We completed Sprint number 3
+      * Met for Sprint number 4
+      * Discussed bugs that appeared after Sprint number 3
+      * Brainstormed how to debug it.
+   * Meeting 6 (April 23 2020, 3pm, Remote):
+      * Debugged everything from Sprint number 3
+      * We completed Sprint number 4
+      * Met for Sprint number 5
+      * Discussed bugs that appeared after Sprint number 4
+      * Brainstormed how to debug it.
+      * Plan to test all features manually.
+   * Meeting 7 (April 30 2020, 3pm, Remote):
+      * Debugged everything from Sprint number 4
+      * We completed Sprint number 5
+      * Tested manually and finalized project 2.
+Project 3
+   * Meeting 8 (May 3 2020, 3pm, Remote):
+      * Discussed to develop Test suite for product
+      * Tested producr
