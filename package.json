@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "_comments": "Change test to jest instead of mocha if developers want to test for home.js",
   "scripts": {
-    "test": "mocha --ui tdd tests/test-server.js"
+    "test": "mocha --ui tdd tests/test-server.js" 
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
     "socket.io-client": "^2.3.0"
   },
   "devDependencies": {
+    "jest": "^26.0.1",
     "nodemon": "^2.0.3",
     "mocha": "^7.1.2"
   }

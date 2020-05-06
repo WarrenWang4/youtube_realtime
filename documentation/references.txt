@@ -21,3 +21,10 @@ Used contributer Peter Sherif's post to the above Stack Overflow page to create 
 
 8.) https://www.w3schools.com/w3css/tryw3css_templates_start_page.htm#
 Used in index.html as a base for our landing page.
+
+9.) https://mochajs.org/
+We used this framework to test our servers!
+
+10.) https://jestjs.io/
+We used this framework to test home.js. Due to miscommunication, we ended up using 2 testing frameworks, 
+so we'll have to change scripts on package.json to either mocha or jest.

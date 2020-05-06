@@ -7,9 +7,7 @@ var provider = new firebase.auth.GoogleAuthProvider();
 //Returns information into the firestore database about the user
 //if promise catches, then sends a console log error.
 function signIn() {
-   firebase.auth()
-   
-   .signInWithPopup(provider).then(function(result) {
+   firebase.auth().signInWithPopup(provider).then(function(result) {
       var token = result.credential.accessToken;
       var user = result.user;
       

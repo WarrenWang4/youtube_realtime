@@ -5,7 +5,7 @@ After doing project 3 we learn that the hardest part of unit testing in JavaScri
 but it is learning how to properly structure and architect our code such that it is easily testable for future projects!
 */
 
-const { isYoutube, CheckPassword } = require('./home')
+const { isYoutube, CheckPassword } = require('../public/home')
 
 test('Tesiting if given link is not a Youtube link', () => {
     expect(isYoutube("https://www.google.com/")).toBe(false)
