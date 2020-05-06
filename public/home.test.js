@@ -1,5 +1,5 @@
 /* 
-To run the unit test do "npm install --save-dev jest" and "npm run" afterwards.
+To run the unit test do "npm install --save-dev jest" and "npm run test" afterwards.
 We will have to also uncomment out all the DOM manuplation and structures code (Stated where to uncomment on home.js).
 After doing project 3 we learn that the hardest part of unit testing in JavaScript isn't the testing,
 but it is learning how to properly structure and architect our code such that it is easily testable for future projects!
