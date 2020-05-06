@@ -1,4 +1,3 @@
-document.getElementById("error").style.visibility = "hidden";
 //The following function determines if the inputted URL is a valid Youtube video URL. 
 //If it is a valid Youtube video URL, the video id portion of the youtube video link is returned. If not, false is returned.
 function isYoutube(getURL){
@@ -22,7 +21,13 @@ function CheckPassword(inputtxt){
   }
 } 
 
+module.exports = { isYoutube, CheckPassword }
+
+// Uncomment everything below this line when unit testing.
+document.getElementById("error").style.visibility = "hidden";
+
 let linksList = [];
+
 //Below, an event listener for "click" is attached to the button element with ID "another". This button is clicked if the user wants to input another Youtube video link.
 //The call-back function checks to see if the most recently inputted URL is indeed a valid Youtube video URL.
 //If the URL is a valid Youtube video URL, the URL is pushed to the array called "linksList". If not, an error message becomes visible on the screen.
@@ -37,6 +42,7 @@ document.getElementById("another").addEventListener('click', function(){
     document.getElementById("error").style.visibility = "visible";
   }
 });
+
 //Below, an event listener for "click" is attached to the button element with ID "submit1". This button is clicked if the user is ready to CREATE a group for watching their chosen Youtube videos.
 //The call-back function determines if the user has met all of the requirements to create a group.
 document.getElementById("submit1").addEventListener('click', async function(){
@@ -94,6 +100,7 @@ document.getElementById("submit1").addEventListener('click', async function(){
       }
   });
 });
+
 ////Below, an event listener for "click" is attached to the button element with ID "submit2". This button is clicked if the user is ready to JOIN a group for watching Youtube videos.
 //The call-back function determines if the group password inputted by the user exists within the database collection.
 //If the inputted-group password does exist, then the user is taken to the video-watching page (./video.html) so that they can watch Youtube videos with the rest of their group members.
