@@ -4,7 +4,7 @@ var mocha = require('mocha')
   var describe = mocha.describe
   var it = mocha.it
 
-
+//test user
 let appUser1 = {'name':'Jack', 'groupToken':'1111111111111'};
 describe("Server",function(){
 	/* Test 1 - New User enters chat/group and lets everyone in their group know about it */
