@@ -27,4 +27,4 @@ We used this framework to test our servers!
 
 10.) https://jestjs.io/
 We used this framework to test home.js. Due to miscommunication, we ended up using 2 testing frameworks, 
-so we'll have to change scripts on package.json to either mocha or jest.
+so we'll have to use 2 scripts on package.json to either test mocha or jest.

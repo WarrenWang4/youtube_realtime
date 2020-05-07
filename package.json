@@ -5,7 +5,8 @@
   "main": "index.js",
   "_comments": "Change test to jest instead of mocha if developers want to test for home.js",
   "scripts": {
-    "test": "mocha --ui tdd tests/test-server.js" 
+    "test": "mocha --ui tdd tests/test-server.js",
+    "test1": "jest"
   },
   "repository": {
     "type": "git",
